@@ -1,3 +1,5 @@
+-- services.msc mysql 재실행시 안되면
+
 use menudb;
 
 -- 테이블 삭제
