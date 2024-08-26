@@ -1,3 +1,12 @@
+use mysql;
+
+create database moviedb;
+
+grant all PRIVILEGES on moviedb.* to 'gangnam'@'%';
+
+show grants for 'gangnam'@'%';
+
+
 use moviedb;
 
 DROP TABLE IF EXISTS movie_theaters;
@@ -42,11 +51,40 @@ SELECT*FROM movies;
 SELECT*FROM movie_theaters;
 SELECT*FROM reservations;
 
+
+-- 1. 모든 영화관에서 총 몇개의 좌석이 예약되었나요?
 SELECT
-	title,
-	MAX(reserved_seats)
+	SUM(reserved_seats) '총 예약 좌석수'
 FROM
 	movies;
+    
+-- 2. 가장 많이 예약된 영화는 어떤거고 몇석이 되었나요?   
+SELECT 
+	title as '인기짱 영화',
+	(total_seats - reserved_seats) as '남은 좌석수'
+FROM movies
+ORDER BY reserved_seats DESC
+LIMIT 1;
+
+SELECT
+	title  as '인기짱 영화',
+	(total_seats - reserved_seats) as '남은 좌석수'
+FROM 
+	movies
+WHERE 
+	reserved_seats = (SELECT MAX(reserved_seats) FROM movies);
+
+-- 3. 특정 영화의 남은 좌석 수를 확인 해주세요 (아무거나 골라서)
+SELECT
+	title,
+	(total_seats - reserved_seats) as '남은 좌석수'
+FROM 
+	movies
+WHERE 
+	title = '파일럿';
+	
+
+
 	
 
 /*
